@@ -1,0 +1,17 @@
+* Firewarden  - A common lisp project to sync firefox and bitwarden passwords
+
+** Usage
+
+** Installation
+
+** Author
+
++ Rajesh Gaire (rajeshgaire.rg@gmail.com)
+
+** Copyright
+
+Copyright (c) 2024 Rajesh Gaire (rajeshgaire.rg@gmail.com)
+
+** License
+
+Licensed under the MIT License.
