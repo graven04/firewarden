@@ -5,7 +5,8 @@
   :maintainer "Rajesh Gaire"
   :mailto "rajeshgaire.rg@gmail.com"
   :license "MIT"
-  :depends-on ("cl-cvs")
+  :depends-on ("cl-cvs" 
+	       "clingon")
   :components ((:module "src"
                 :components
                 ((:file "main"))))
