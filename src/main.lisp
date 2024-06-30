@@ -1,6 +1,10 @@
 (defpackage firewarden
-  (:use :cl))
-(in-package :firewarden)
+  (:use :cl)
+  (:import-from
+   :clingon)
+  (:export
+   #:main))
+  (in-package :firewarden)
 
 ;; load the relevent libraries
 (ql:quickload "clingon") ; load clingon
@@ -38,16 +42,21 @@
    :description "A command to sync firefox passwords to bitwardern using exported csv files"
    :version "0.1"
    :options (cli/options)
-   :handler (cli/handler)))
+   :handler #'cli/handler))
 
 
 (defun cli/handler (cmd)
   "A handler function for cli/command"
-  (defvar *firefox-csv-path* (clingon:getopt cmd :firefox)
-    (defvar *firefox-csv-path* (clingon:getopt cmd :firefox))))
-
+  (let ((firefox (clingon:getopt cmd :firefox))
+	(bitwarden (clingon:getopt cmd :bitwarden)))
+	(print firefox)
+	(print bitwarden)))
+    
 
 (defun main ()
   "The main entrypoint of the firewarden program"
   (let ((app (cli/command)))
     (clingon:run app)))
+
+
+
