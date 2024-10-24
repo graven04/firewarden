@@ -5,11 +5,13 @@
   :maintainer "Rajesh Gaire"
   :mailto "rajeshgaire.rg@gmail.com"
   :license "MIT"
-  :depends-on (;;#:cl-cvs 
+  :depends-on (#:cl-csv
 	       #:clingon)
   :components ((:module "src"
                 :components
-                ((:file "main"))))
+                ((:file "main")
+		 (:file "csv-parser")
+		 (:file "logic.lisp"))))
   :description "A common lisp project to sync firefox and bitwarden passwords"
   :in-order-to ((test-op (test-op "firewarden/tests")))
   :build-operation "program-op"
