@@ -4,13 +4,30 @@
 
 ** Installation
 
+** Program logic
+
+The steps of the programme:
+
+- Import both CSV files
+- Verify the integrity / Indenity of the CSV files
+- load both cvs files into a master list of login details that has the follwoing csv headers
+  =b_folder, b_type, domain, url, username, password=
+  : where b_* are bitwarden specific
+  : domain is the httpRealm and the name part of Firefox and Bitwarden CSVs respectively
+  : url is the url and the longin_url part of Firefox and Bitwarden CSVs respectively
+  : username, password are the same from firefox and map to login_{username/password} for bitwarden
+- all the logins are searched for duplicate username/password fields and the user is prompted whether they are the same
+  - This can be skipped with a silent flag
+- the duplicates are stored in another CSV file for later manual inspection if needed
+- Based on the flag provided covert all logins to either firefox or bitwarden csv 
+
 ** Author
 
-+ Rajesh Gaire (rajeshgaire.rg@gmail.com)
+Graven04
 
 ** Copyright
 
-Copyright (c) 2024 Rajesh Gaire (rajeshgaire.rg@gmail.com)
+Copyright (c) 2024 (Graven04 93924539+graven04@users.noreply.github.com)
 
 ** License
 
