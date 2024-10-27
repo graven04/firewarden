@@ -25,10 +25,6 @@ The steps of the programme:
 
 Graven04
 
-** Copyright
-
-Copyright (c) 2024 (Graven04 93924539+graven04@users.noreply.github.com)
-
 ** License
 
 Licensed under the MIT License.
