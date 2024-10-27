@@ -28,9 +28,9 @@
 
 
 (defun initialise-list-database ()
-  (if (boundp *main_login_details*)
+  (if (boundp '*main_login_details*)
       (setf *main_login_details* '( ("b_folder" "b_type" "domain" "url" "username" "password")))
-      (prong (defvar *main_login_details*)
+      (progn (defvar *main_login_details*)
 	     (setf *main_login_details* '(("b_folder" "b_type" "domain" "url" "username" "password"))))))
 
 
@@ -38,25 +38,46 @@
   (nconc *main_login_details* (list (list b_folder b_type domain url username password))))
 
 
+(defun compare-to-database-logins (&key imported-login database login-type)
+  (if (equal login-type "firefox")
+      (let ((url (first imported-login))
+	    (username (second imported-login))
+	    (password (third imported-login)))
+	(loop for x in database
+	      do (if (or (equal url (fourth x)) (and (equal username (fifth x)) (equal password (sixth x))))
+		     x)))
+      (let ((url (eighth imported-login))
+	    (username (ninth imported-login))
+	    (password (tenth imported-login)))
+	(loop for x in database
+	      do (if (or (equal url (fourth x)) (and (equal username (fifth x)) (equal password (sixth x))))
+		     x)))))
+
+
+
 (defun import-firefox-csv-to-list-database (firefox-csv-path)
   (if (verify-csv-file firefox-csv-path :program "firefox")
-      (loop for x in firefox-csv
+      (loop for x in (read-csv firefox-csv-path)
 	    do (let ((domain (first x))
 		     (url (first x))
 		     (username (second x))
 		     (password (third x)))
-
+		 (if (not (compare-to-database-logins :imported-login x :database *main_login_details* :login-type "firefox"))
+		     
 		 (add-to-main-login-details :b_folder ""
 					    :b_type "login"
 					    :domain domain
 					    :url url
 					    :username username
-					    :password password)))))
+					    :password password)
+		 (inform-of-duplicate x)
+
+		 )))))
 
 
 (defun import-bitwarden-csv-to-list-database (bitwarden-csv-path)
   (if (verify-csv-file bitwarden-csv-path :program "bitwarden")
-      (loop for x in bitwarden-csv
+      (loop for x in (read-csv bitwarden-csv-path)
 	    do (if (equal (third x) "login")
 		   (let ((b_folder (first x))
 			 (domain (fourth x))
@@ -70,5 +91,3 @@
 						:url url
 						:username username
 						:password password))))))
-
-
