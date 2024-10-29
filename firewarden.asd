@@ -11,7 +11,7 @@
                 :components
                 ((:file "main")
 		 (:file "csv-parser")
-		 (:file "logic.lisp"))))
+		 (:file "logic"))))
   :description "A common lisp project to sync firefox and bitwarden passwords"
   :in-order-to ((test-op (test-op "firewarden/tests")))
   :build-operation "program-op"

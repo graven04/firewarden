@@ -1,18 +1,17 @@
-(defpackage firewarden
+ (defpackage firewarden
   (:use :cl)
   (:import-from
    :clingon)
   (:export
    #:main))
-  (in-package :firewarden)
+(in-package :firewarden)
 
 ;; load the relevent libraries
 (ql:quickload "clingon") ; load clingon
-(ql:quickload "cl-csv") ; load cl-csv 
+
 
 
 ;; Create the command line feature fo the program with flags and arguments using clingon library
-
 (defun cli/options ()
   "Returns a list of options for our main command"
   (list
@@ -28,11 +27,31 @@
     :short-name #\b
     :long-name "bitwarden"
     :key :bitwarden)
-  (clingon:make-option
+   (clingon:make-option
    :flag      
    :description "short --help"
    :short-name #\h
-   :key :help)))
+   :key :help)
+   (clingon:make-option
+    :flag
+    :description "Silent, no output and auto accept duplicates"
+    :short-name #\s
+    :long-name "silent"
+    :key :silentp)
+   (clingon:make-option
+    :flag
+    :description "Auto accept duplicate suggestions, no input nessesary"
+    :short-name #\y
+    :long-name "accept-all"
+    :key :no-inputp)))
+
+
+(defun cli/handler (cmd)
+  "A handler function for cli/command"
+  (defvar *firefox-csv* (read-csv (clingon:getopt cmd :firefox)))
+  (defvar *bitwarden-csv* (read-csv (clingon:getopt cmd :bitwarden)))
+  (defvar *no-inputp* (clingon:getopt cmd :no-outputp))
+  (defvar *silentp* (clingon:getopt cmd :silentp)))
 
 
 (defun cli/command ()
@@ -45,18 +64,9 @@
    :handler #'cli/handler))
 
 
-(defun cli/handler (cmd)
-  "A handler function for cli/command"
-  (let ((firefox (clingon:getopt cmd :firefox))
-	(bitwarden (clingon:getopt cmd :bitwarden)))
-	(print firefox)
-	(print bitwarden)))
     
 
 (defun main ()
   "The main entrypoint of the firewarden program"
   (let ((app (cli/command)))
     (clingon:run app)))
-
-
-
