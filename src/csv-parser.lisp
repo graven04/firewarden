@@ -53,6 +53,21 @@
 	      do (if (or (equal url (fourth x)) (and (equal username (fifth x)) (equal password (sixth x))))
 		     x)))))
 
+(defun inform-of-duplicate (duplicate-login database-login)
+  (if (equal *silentp* t)
+      #\y
+      (if (equal *no-inputp* t)
+	  (progn 
+	    (format t "Duplicates found and added to duplicates file: ~2% ~a ~2% ~a ~2%" duplicate-login database-login)
+	    #\y)
+	  (progn (format t "Are these two logins the same: ~2% ~a ~2% ~a ~2% y/n ~2%:" duplicate-login database-login)
+		 (read-char))))
+ )
+  
+;; check if the no-input flag is on or the slient flag is on
+;; if no-input is on dispay print formatted string asking whether the two are duplicates
+;; if slient flag is on dont output anything and automatically add the login to the diplucates csv
+;; otherwise, output duplicate message and waut for input: if yes add to dup csv otherwise to database  
 
 
 (defun import-firefox-csv-to-list-database (firefox-csv-path)
@@ -61,18 +76,30 @@
 	    do (let ((domain (first x))
 		     (url (first x))
 		     (username (second x))
-		     (password (third x)))
-		 (if (not (compare-to-database-logins :imported-login x :database *main_login_details* :login-type "firefox"))
-		     
-		 (add-to-main-login-details :b_folder ""
-					    :b_type "login"
-					    :domain domain
-					    :url url
-					    :username username
-					    :password password)
-		 (inform-of-duplicate x)
+		     (password (third x))
+		     (duplicate-value (compare-to-database-logins :imported-login x :database *main_login_details* :login-type "firefox")))
+		 (if (equal duplicate-value x)
 
-		 )))))
+		     
+		     (if (equal (inform-of-duplicate x duplicate-value) #\y)
+
+				(add-duplicate-to-duplicate-file x)
+				
+				(add-to-main-login-details :b_folder ""
+						:b_type "login"
+						:domain domain
+						:url url
+						:username username
+							   :password password))
+		     (add-to-main-login-details :b_folder ""
+						:b_type "login"
+						:domain domain
+						:url url
+						:username username
+						:password password)
+
+		     )))))
+
 
 
 (defun import-bitwarden-csv-to-list-database (bitwarden-csv-path)
@@ -83,11 +110,16 @@
 			 (domain (fourth x))
 			 (url (eighth x))
 			 (username (ninth x))
-			 (password (tenth x)))
+			 (password (tenth x))
+			 (duplicate-value (compare-to-database-logins :imported-login x :database *main_login_details* :login-type "firefox")))
+		 (if (not duplicate-value)
 
 		     (add-to-main-login-details :b_folder b_folder
 						:b_type "login"
 						:domain domain
 						:url url
 						:username username
-						:password password))))))
+						:password password)
+		     (inform-of-duplicate x duplicate-value)
+
+		 ))))))
