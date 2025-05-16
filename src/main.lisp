@@ -1,14 +1,15 @@
- (defpackage firewarden
+(in-package :cl)
+
+;; load the relevent libraries
+(ql:quickload "clingon") ; load clingon
+
+(defpackage firewarden
   (:use :cl)
   (:import-from
    :clingon)
   (:export
    #:main))
 (in-package :firewarden)
-
-;; load the relevent libraries
-(ql:quickload "clingon") ; load clingon
-
 
 
 ;; Create the command line feature fo the program with flags and arguments using clingon library
