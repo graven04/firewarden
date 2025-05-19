@@ -27,15 +27,15 @@
 
 
 
-(with-open-file (stream #P"~/downloads/inbox/password-sync/agnostic-format.csv"
+(with-open-file (stream #P""
                           :direction :output
                           :if-exists :append
                           :external-format :utf-8)
 
-  (cl-csv:do-csv (row #P"~/downloads/inbox/password-sync/bitwarden_export_20240518183701.csv")
+  (cl-csv:do-csv (row #P"")
       (let ((agnostic-csv-row (make-row-agnostic row :program "bitwarden")))
       (if
-       (check-for-duplicates agnostic-csv-row "~/downloads/inbox/password-sync/agnostic-format.csv", :program "bitwarden")
+       (check-for-duplicates agnostic-csv-row "", :program "bitwarden")
        (format t "there is a dupe")
        (progn (cl-csv:write-csv-row (make-row-agnostic row :program "bitwarden") :stream stream)
 	      (print agnostic-csv-row))
