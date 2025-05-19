@@ -32,7 +32,31 @@
   "takes either a firefox password or bitwarden password csv and returns a list matching the agnostic csv file row formar wiht those values"
   (if (equal program "firefox")
       (list (first csv-row) (second csv-row) (third csv-row) (fifth csv-row)) ; it is fifth because while the csv header does not show it there is a ,, between passwords and the httpRealm, makeing it 5th in file but 4th in header
-      (list (eighth csv-row) (ninth csv-row) (tenth csv-row) (fourth csv-row))
-      ))
+      (list (eighth csv-row) (ninth csv-row) (tenth csv-row) (fourth csv-row))))
 
 
+
+(defun check-for-duplicates (agnostic-csv-row agnostic-file-path &key program)
+  (let ((domain (fourth agnostic-csv-row))
+	(username (second agnostic-csv-row))
+	(password (third agnostic-csv-row))
+	(dupe nil))
+
+    (cl-csv:do-csv (row (parse-namestring agnostic-file-path))
+      (let ((row (make-row-agnostic row :program "bitwarden")))
+      (if 
+       (or
+	(equal domain (fourth row))
+	(or (equal username (second row)) (equal password (third row))))
+       
+       (setf dupe t)
+       )))
+    dupe
+     ))
+
+   
+
+
+  
+ 
+ 

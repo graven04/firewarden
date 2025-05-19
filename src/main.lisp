@@ -49,8 +49,8 @@
 
 (defun cli/handler (cmd)
   "A handler function for cli/command"
-  (defvar *firefox-csv* (read-csv (clingon:getopt cmd :firefox)))
-  (defvar *bitwarden-csv* (read-csv (clingon:getopt cmd :bitwarden)))
+  (defvar *firefox-csv* (clingon:getopt cmd :firefox))
+  (defvar *bitwarden-csv* (clingon:getopt cmd :bitwarden))
   (defvar *no-inputp* (clingon:getopt cmd :no-outputp))
   (defvar *silentp* (clingon:getopt cmd :silentp)))
 
